@@ -1,8 +1,10 @@
 #Módulo para generar reportes según datos de módulos de: organizer.py, analyzer.py y auditor.py
 
+#Importamos librerías y módulos
 import csv
 import datetime
 import os
+import utils
 
 #archivos de prueba (eliminar luego en base a otros modulos)
 archivo_auditoria = "audit.log"
@@ -104,6 +106,7 @@ def iniciar_modulo_reportes(datos_organizacion_temp=None, datos_analisis_temp=No
         
         #Preguntar al usuario la opción
         opcion = input("Seleccione una opción: ")
+        utils.limpiar_pantalla()
 
         #Variables dependiendo de la selección
         datos_a_reportar = []
@@ -148,7 +151,7 @@ def iniciar_modulo_reportes(datos_organizacion_temp=None, datos_analisis_temp=No
         print("1. TXT (Texto legible en archivo .txt)")
         print("2. CSV (Archivo .csv compatible con Excel)")
         formato_opcion = input("Seleccione el formato deseado: ")
-
+        utils.limpiar_pantalla()
         #Generar nombre de archivo único con el tiempo
         timestamp = datetime.datetime.now().strftime("%Y.%m.%d_%H%M%S")
         
