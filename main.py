@@ -1,6 +1,7 @@
 import sys
 import utils  # Importamos tus herramientas
 import datetime
+import auditor
 
 # Estos imports darán error hasta que tus compañeros creen sus funciones.
 # Por ahora los dejaremos comentados o simularemos que funcionan.
@@ -48,9 +49,9 @@ def main():
                 mostrar_menu_auditor()
                 opcion = input(">> Selecciona una opción (1-5): ").strip()
                 if opcion == "1":
-                    generar_snapshot("./test_samples",tiempo_inicio)
+                    auditor.generar_snapshot("./test_samples",tiempo_inicio)
                 elif opcion == "2":
-                    generar_reporte("./test_samples",tiempo_inicio)
+                    auditor.generar_reporte("./test_samples",tiempo_inicio)
                 elif opcion == "3":
                     break
                 else:
