@@ -88,7 +88,3 @@ def generar_reporte(carpeta,tiempo):
         escribir_log("INFO", "No hay cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
     else:
         escribir_log("INFO", "Se detectaron cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
-
-
-generar_snapshot("./test_samples",datetime.datetime.now().strftime("%Y-%m-%d %H-%M"))
-generar_reporte("./test_samples",datetime.datetime.now().strftime("%Y-%m-%d %H-%M"))
