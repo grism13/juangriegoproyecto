@@ -3,7 +3,7 @@ import datetime
 import json
 
 def escribir_log(nivel, mensaje, detalles,tiempo):
-    """Escribe un log con el nivel, mensaje y detalles."""
+    """Escribe un log con el nivel, mensaje y detalles para el auditor."""
     # 1. Fecha con milisegundos (mmm)
     ahora = datetime.datetime.now()
     fecha_fmt = ahora.strftime("%Y-%m-%d %H:%M:%S")
@@ -17,6 +17,23 @@ def escribir_log(nivel, mensaje, detalles,tiempo):
     # 3. Escribir y mostrar en consola
     print(linea_log)
     with open(f"./logs/audit_{tiempo}.log", "a") as log:
+        log.write(linea_log)
+
+def escribir_log_cambios(nivel, mensaje, detalles,tiempo):
+    """Escribe un log con el nivel, mensaje y detalles para los cambios."""
+    # 1. Fecha con milisegundos (mmm)
+    ahora = datetime.datetime.now()
+    fecha_fmt = ahora.strftime("%Y-%m-%d %H:%M:%S")
+    milisegundos = int(ahora.microsecond / 1000)
+    tiempo_completo = f"{fecha_fmt},{milisegundos:03d}" # :03d asegura 3 dígitos (ej. 005)
+    
+    # 2. Construir la línea
+    # Formato: YYYY-MM-DD HH:MM:SS,mmm [LEVEL] [Module] Message... Key=Value
+    linea_log = f"{tiempo_completo} [{nivel}] [Auditor] {mensaje} {detalles}\n"
+    
+    # 3. Escribir y mostrar en consola
+    print(linea_log)
+    with open(f"./cambios/cambios_{tiempo}.log", "a") as log:
         log.write(linea_log)
 
 def obtener_estado_actual(carpeta):
@@ -70,20 +87,19 @@ def generar_reporte(carpeta,tiempo):
     modificados = set_actual & set_anterior
     if not os.path.exists("./cambios"):
         os.makedirs("./cambios")
-    with open(f"./cambios/cambios_{datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")}.log", "a") as log:
-        if nuevos:
-            for archivo in nuevos:  
-                log.write(f"Nuevo archivo: {archivo} {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n")
+    if nuevos:
+        for archivo in nuevos:  
+            escribir_log_cambios("INFO", "Nuevo archivo", f"Archivo={archivo}",tiempo)
+            archivos_cambiados += 1
+    if eliminados:      
+        for archivo in eliminados:
+            escribir_log_cambios("INFO", "Archivo eliminado", f"Archivo={archivo}",tiempo)
+            archivos_cambiados += 1
+    if modificados:
+        for archivo in modificados:
+            if estado_actual[archivo][0] != estado_anterior[archivo][0] or estado_actual[archivo][1] != estado_anterior[archivo][1]:
+                escribir_log_cambios("INFO", "Archivo modificado", f"Archivo={archivo}",tiempo)
                 archivos_cambiados += 1
-        if eliminados:      
-            for archivo in eliminados:
-                log.write(f"Archivo eliminado: {archivo} {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n")
-                archivos_cambiados += 1
-        if modificados:
-            for archivo in modificados:
-                if estado_actual[archivo][0] != estado_anterior[archivo][0] or estado_actual[archivo][1] != estado_anterior[archivo][1]:
-                    log.write(f"Archivo modificado: {archivo} {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n")
-                    archivos_cambiados += 1
     if archivos_cambiados == 0:
         escribir_log("INFO", "No hay cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
     else:
