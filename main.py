@@ -50,8 +50,10 @@ def main():
                 opcion = input(">> Selecciona una opción (1-5): ").strip()
                 if opcion == "1":
                     auditor.generar_snapshot("./test_samples",tiempo_inicio)
+                    input("Presiona Enter para volver...")
                 elif opcion == "2":
                     auditor.generar_reporte("./test_samples",tiempo_inicio)
+                    input("Presiona Enter para volver...")
                 elif opcion == "3":
                     break
                 else:
