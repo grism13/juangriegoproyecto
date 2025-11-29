@@ -1,0 +1,9 @@
+==================================================
+ REPORTE: HALLAZGOS DE ANÁLISIS DE CONTENIDO
+ Fecha: 2025-11-29 14:54
+==================================================
+- {'Archivo': 'datos.txt', 'Patron': 'Email', 'Hallazgo': 'juan@gmail.com', 'Linea': 10}
+- {'Archivo': 'datos.txt', 'Patron': 'Telf', 'Hallazgo': '0414-1234567', 'Linea': 15}
+
+==================================================
+FIN DEL REPORTE
