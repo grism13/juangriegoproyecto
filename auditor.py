@@ -19,10 +19,17 @@ def estado_actual(carpeta)
 def generar_snapshot(carpeta):
     """Genera un snapshot del estado actual del proyecto."""
     if not os.path.exists(".snapshot.json"):
+        respuesta = "s"
+    else:
+        print(f"El archivo .snapshot.json ya existe. {datetime.datetime.now()}")
+        print("Desea sobreescribir el snapshot? (s/n)")
+        respuesta = input().lower()
+    if respuesta == "s":
         with open(".snapshot.json", "w") as snapshot:
             json.dump(estado_actual(carpeta), snapshot, indent=4)
         print(f"Snapshot generado exitosamente. {datetime.datetime.now()}")
     else:
-        print(f"El archivo .snapshot.json ya existe. {datetime.datetime.now()}")
+        print(f"Snapshot no generado Se usara el snapshot anterior. {datetime.datetime.now()}")
+
 
 
