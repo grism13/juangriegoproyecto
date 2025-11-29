@@ -1,5 +1,6 @@
 import sys
 import utils  # Importamos tus herramientas
+import datetime
 
 # Estos imports darán error hasta que tus compañeros creen sus funciones.
 # Por ahora los dejaremos comentados o simularemos que funcionan.
@@ -18,7 +19,16 @@ def mostrar_menu_principal():
     print("5. Salir")
     print("-" * 60)
 
+def mostrar_menu_auditor():
+    """Despliega las opciones del sistema."""
+    utils.mostrar_encabezado("KIT DE AUDITORIA (v1.0)")
+    print("1. Generar snapshot")
+    print("2. Generar reporte")
+    print("3. Salir")
+    print("-" * 60)
+
 def main():
+    tiempo_inicio = datetime.datetime.now().strftime("%Y-%m-%d %H-%M")
     while True:
         mostrar_menu_principal()
         opcion = input(">> Selecciona una opción (1-5): ").strip()
@@ -34,8 +44,18 @@ def main():
             input("Presiona Enter para volver...")
 
         elif opcion == "3":
-            # Aquí llamaremos a: auditor.iniciar()
-            print("\n🚧 Módulo del Auditor (Gabriel) en construcción...")
+            while True:
+                mostrar_menu_auditor()
+                opcion = input(">> Selecciona una opción (1-5): ").strip()
+                if opcion == "1":
+                    generar_snapshot("./test_samples",tiempo_inicio)
+                elif opcion == "2":
+                    generar_reporte("./test_samples",tiempo_inicio)
+                elif opcion == "3":
+                    break
+                else:
+                    print("\n❌ Error: Opción no válida.")
+                    input("Presiona Enter para intentar de nuevo...")
             input("Presiona Enter para volver...")
 
         elif opcion == "4":

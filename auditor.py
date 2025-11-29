@@ -56,7 +56,7 @@ def generar_reporte(carpeta,tiempo):
     if not os.path.exists("./logs"):
         os.makedirs("./logs")
     if not os.path.exists("./logs/snapshot.json"):
-        escribir_log("ERROR", "No se encontro snapshot.json", " ",tiempo)
+        escribir_log("ERROR", "No se encontro snapshot.json, Volviendo al menu principal", " ",tiempo)
         return
     with open("./logs/snapshot.json", "r") as snapshot:
         estado_anterior = json.load(snapshot)
