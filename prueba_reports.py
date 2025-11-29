@@ -7,13 +7,13 @@ import os
 # y el programa principal tiene estos datos en memoria:
 
 datos_org_simulados = [
-    {"Archivo": "foto.jpg", "Accion": "Movido", "Destino": "/Imagenes"},
-    {"Archivo": "tesis.doc", "Accion": "Ignorado", "Destino": "N/A"}
+    {"Archivo": "foto.jpg", "Acción": "Movido", "Destino": "/Imagenes"},
+    {"Archivo": "tesis.doc", "Acción": "Ignorado", "Destino": "N/A"}
 ]
 
 datos_ana_simulados = [
-    {"Archivo": "datos.txt", "Patron": "Email", "Hallazgo": "juan@gmail.com", "Linea": 10},
-    {"Archivo": "datos.txt", "Patron": "Telf", "Hallazgo": "0414-1234567", "Linea": 15}
+    {"Archivo": "datos.txt", "Patrón": "Email", "Hallazgo": "juan@gmail.com", "Línea": 10},
+    {"Archivo": "datos.txt", "Patrón": "Telf", "Hallazgo": "0414-1234567", "Línea": 15}
 ]
 
 # Crear un audit.log falso si no existe para probar la opción 3
