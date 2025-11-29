@@ -7,7 +7,7 @@ import auditor
 # Por ahora los dejaremos comentados o simularemos que funcionan.
 # import organizer
 # import analyzer
-# import auditor
+
 # import reports
 
 def mostrar_menu_principal():
