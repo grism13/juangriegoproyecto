@@ -1,0 +1,106 @@
+#Modulo de organizar mediante carpetas
+import os
+import shutil
+import time
+
+def pedir_ruta():
+    ruta_de_carpeta = input("Ingrese la ruta donde se encuentra su archivo: ")
+
+    #Ejecuta este bucle hasta que el usuario ingrese una ruta existente
+    while not os.path.exists(ruta_de_carpeta):
+        print("Ingrese una ruta existente para continuar...")   
+        ruta_de_carpeta = input("Ingrese la ruta donde se encuentra su archivo: ")
+
+    return ruta_de_carpeta
+
+def pedir_opcion():
+      respuesta = input("""Perfecto. Ahora es necesario que ingrese una de estas opciones (Solo se permiten respuestas en numeros enteros del 1 al 3):
+1) Organizar archivos por tamaño
+2) Organizar archivos por extension (PDF, TXT, etc)
+3) Organizar archivos por fecha
+""")
+      return respuesta
+
+def mover_archivo(ruta_origen, carpeta_destino_nombre, carpeta_raiz ):
+
+    # Calculamos la ruta completa de la carpeta destino
+    ruta_destino_carpeta = os.path.join(carpeta_raiz, carpeta_destino_nombre)
+    
+    # Obtenemos solo el nombre del archivo (ej. "foto.jpg")
+    nombre_archivo = os.path.basename(ruta_origen)
+    
+    # Calculamos la ruta final donde quedará el archivo
+    ruta_final = os.path.join(ruta_destino_carpeta, nombre_archivo)
+
+    try:
+        # 1. Crear carpeta si no existe 
+        if not os.path.exists(ruta_destino_carpeta):
+            os.makedirs(ruta_destino_carpeta)
+            print(f" Carpeta creada: {carpeta_destino_nombre}")
+        
+        # 2. Mover archivo
+        shutil.move(ruta_origen, ruta_final)
+        print(f"Movido: {nombre_archivo} -> {carpeta_destino_nombre}")
+        
+    except Exception as e:
+        print(f"Error moviendo {nombre_archivo}: {e}")
+
+def organizar_archivos_por_extension(ruta_de_carpeta):
+
+    #Obtener lista de los archivos
+    contenido = os.listdir(ruta_de_carpeta)
+    print(f"""
+#---------------------------------------------------------------------------------------------------
+# Analizando carpeta: {ruta_de_carpeta}
+#---------------------------------------------------------------------------------------------------
+""")
+
+    for archivo in contenido:
+        ruta_completa = os.path.join(ruta_de_carpeta, archivo)
+
+        #Se verifica que es un archivo y no carpeta
+        if os.path.isfile(ruta_completa):
+            nombre, tipo = os.path.splitext(archivo)
+            #Se elimina el puto de la extension
+            tipo = tipo[1:]
+
+            if not tipo:
+                tipo = "Otros"
+
+            mover_archivo(ruta_completa, tipo, ruta_de_carpeta)
+
+def organizar_archivos_por_espacio(ruta_de_carpeta):
+    contenido = os.listdir(ruta_de_carpeta)
+
+    for archivo in contenido:
+        ruta_completa = os.path.join(ruta_de_carpeta, archivo)
+
+        if os.path.isfile(ruta_completa):
+            tamano_mb = os.path.getsize(ruta_completa) / (1024 * 1024)
+            nombre_carpeta = "VARIOS"
+
+            if tamano_mb < 1:
+                nombre_carpeta = "PEQUEÑOS"
+            elif tamano_mb < 10:
+                nombre_carpeta = "MEDIANOS"
+            else:
+                nombre_carpeta = "GRANDES"
+            
+            
+            mover_archivo(ruta_completa, nombre_carpeta, ruta_de_carpeta)
+
+def organizar_archivos_por_fecha(ruta_carpeta):
+
+    contenido = os.listdir(ruta_carpeta)
+
+    for archivo in contenido:
+        ruta_completa = os.path.join(ruta_carpeta, archivo)
+        
+        if os.path.isfile(ruta_completa):
+
+            timestamp = os.path.getmtime(ruta_completa)
+            fecha = time.localtime(timestamp)
+            anio = str(fecha.tm_year) 
+            
+            # LLAMAMOS AL OBRERO
+            mover_archivo(ruta_completa, anio, ruta_carpeta)

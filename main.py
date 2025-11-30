@@ -2,6 +2,7 @@ import sys
 import utils  # Importamos tus herramientas
 import datetime
 import auditor
+import organizer
 
 # Estos imports darán error hasta que tus compañeros creen sus funciones.
 # Por ahora los dejaremos comentados o simularemos que funcionan.
@@ -35,10 +36,25 @@ def main():
         opcion = input(">> Selecciona una opción (1-5): ").strip()
 
         if opcion == "1":
-            # Aquí llamaremos a: organizer.iniciar()
-            print("\n🚧 Módulo del Organizador (Eliezer) en construcción...")
-            input("Presiona Enter para volver...")
+            print("Iniciando Modulo Organizador...")
+            #Se obtiene ruta y opcion de organizacion
+            carpeta = organizer.pedir_ruta()
+            opcion = organizer.pedir_opcion()
 
+            if opcion == "1":
+                organizer.organizar_archivos_por_espacio(carpeta)
+
+            elif opcion == "2":
+                organizer.organizar_archivos_por_extension(carpeta)
+            
+            elif opcion == "3":
+                organizer.organizar_archivos_por_fecha(carpeta)
+
+            else:
+                print("Hubo un error en el sistema...")
+
+            input("Presione ENTER para volver al inicio...")
+            
         elif opcion == "2":
             # Aquí llamaremos a: analyzer.iniciar()
             print("\n🚧 Módulo del Analizador (Roand) en construcción...")
