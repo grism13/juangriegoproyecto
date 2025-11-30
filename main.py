@@ -90,3 +90,5 @@ def main():
             print("\n❌ Error: Opción no válida.")
             input("Presiona Enter para intentar de nuevo...")
 
+if __name__ == "__main__":
+    main()
