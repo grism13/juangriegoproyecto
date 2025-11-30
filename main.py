@@ -6,7 +6,6 @@ import auditor
 import organizer
 =======
 import os
->>>>>>> f7d64a3aa10d81e420f70750cce44e639db1cb9b
 
 # Estos imports darán error hasta que tus compañeros creen sus funciones.
 # Por ahora los dejaremos comentados o simularemos que funcionan.
