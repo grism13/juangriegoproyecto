@@ -2,9 +2,7 @@ import sys
 import utils  # Importamos tus herramientas
 import datetime
 import auditor
-<<<<<<< HEAD
 import organizer
-=======
 import os
 
 # Estos imports darán error hasta que tus compañeros creen sus funciones.
