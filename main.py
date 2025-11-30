@@ -3,6 +3,7 @@ import utils  # Importamos tus herramientas
 import datetime
 import auditor
 import organizer
+import os
 
 # Estos imports darán error hasta que tus compañeros creen sus funciones.
 # Por ahora los dejaremos comentados o simularemos que funcionan.

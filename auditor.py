@@ -50,12 +50,12 @@ def obtener_estado_actual(carpeta):
             estado[ruta_completa] = (tiempo_modificacion, peso)
     return estado
 
-def generar_snapshot(carpeta,tiempo):
+def generar_snapshot(carpeta,tiempo,saltar_comprobacion=False):
     """Genera un snapshot del estado actual del proyecto."""
     if not os.path.exists("./logs"):
         os.makedirs("./logs")
     respuesta = "s"
-    if os.path.exists("./logs/snapshot.json"):
+    if os.path.exists("./logs/snapshot.json") and  not saltar_comprobacion:
         escribir_log("WARNING", "El archivo snapshot.json ya existe."," " ,tiempo)
         print("Desea sobreescribir el snapshot? (s/n)")
         respuesta = input().lower()
@@ -104,3 +104,4 @@ def generar_reporte(carpeta,tiempo):
         escribir_log("INFO", "No hay cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
     else:
         escribir_log("INFO", "Se detectaron cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
+    generar_snapshot(carpeta,tiempo,saltar_comprobacion=True)
