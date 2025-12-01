@@ -1,40 +1,7 @@
 import os
 import datetime
 import json
-
-def escribir_log(nivel, mensaje, detalles,tiempo):
-    """Escribe un log con el nivel, mensaje y detalles para el auditor."""
-    # 1. Fecha con milisegundos (mmm)
-    ahora = datetime.datetime.now()
-    fecha_fmt = ahora.strftime("%Y-%m-%d %H:%M:%S")
-    milisegundos = int(ahora.microsecond / 1000)
-    tiempo_completo = f"{fecha_fmt},{milisegundos:03d}" # :03d asegura 3 dígitos (ej. 005)
-    
-    # 2. Construir la línea
-    # Formato: YYYY-MM-DD HH:MM:SS,mmm [LEVEL] [Module] Message... Key=Value
-    linea_log = f"{tiempo_completo} [{nivel}] [Auditor] {mensaje} {detalles}\n"
-    
-    # 3. Escribir y mostrar en consola
-    print(linea_log)
-    with open(f"./logs/audit_{tiempo}.log", "a") as log:
-        log.write(linea_log)
-
-def escribir_log_cambios(nivel, mensaje, detalles,tiempo):
-    """Escribe un log con el nivel, mensaje y detalles para los cambios."""
-    # 1. Fecha con milisegundos (mmm)
-    ahora = datetime.datetime.now()
-    fecha_fmt = ahora.strftime("%Y-%m-%d %H:%M:%S")
-    milisegundos = int(ahora.microsecond / 1000)
-    tiempo_completo = f"{fecha_fmt},{milisegundos:03d}" # :03d asegura 3 dígitos (ej. 005)
-    
-    # 2. Construir la línea
-    # Formato: YYYY-MM-DD HH:MM:SS,mmm [LEVEL] [Module] Message... Key=Value
-    linea_log = f"{tiempo_completo} [{nivel}] [Auditor] {mensaje} {detalles}\n"
-    
-    # 3. Escribir y mostrar en consola
-    print(linea_log)
-    with open(f"./cambios/cambios_{tiempo}.log", "a") as log:
-        log.write(linea_log)
+from utils import escribir_log
 
 def obtener_estado_actual(carpeta):
     """Devuelve el estado actual del proyecto."""
@@ -56,15 +23,15 @@ def generar_snapshot(carpeta,tiempo,saltar_comprobacion=False):
         os.makedirs("./logs")
     respuesta = "s"
     if os.path.exists("./logs/snapshot.json") and  not saltar_comprobacion:
-        escribir_log("WARNING", "El archivo snapshot.json ya existe."," " ,tiempo)
+        escribir_log("WARNING", "El archivo snapshot.json ya existe."," " ,tiempo,"Auditor","audit")
         print("Desea sobreescribir el snapshot? (s/n)")
         respuesta = input().lower()
     if respuesta == "s":
         with open("./logs/snapshot.json", "w") as snapshot:
             json.dump(obtener_estado_actual(carpeta), snapshot, indent=4)
-        escribir_log("INFO", "Snapshot generado exitosamente.", f"Carpeta={carpeta}",tiempo)
+        escribir_log("INFO", "Snapshot generado exitosamente.", f"Carpeta={carpeta}",tiempo,"Auditor","audit")
     else:
-        escribir_log("INFO", "Snapshot no generado. Se conserva el anterior."," ",tiempo)
+        escribir_log("INFO", "Snapshot no generado. Se conserva el anterior."," ",tiempo,"Auditor","audit")
 
 
 def generar_reporte(carpeta,tiempo):
@@ -73,7 +40,7 @@ def generar_reporte(carpeta,tiempo):
     if not os.path.exists("./logs"):
         os.makedirs("./logs")
     if not os.path.exists("./logs/snapshot.json"):
-        escribir_log("ERROR", "No se encontro snapshot.json, Volviendo al menu principal", " ",tiempo)
+        escribir_log("ERROR", "No se encontro snapshot.json, Volviendo al menu principal", " ",tiempo,"Auditor","audit")
         return
     with open("./logs/snapshot.json", "r") as snapshot:
         estado_anterior = json.load(snapshot)
@@ -89,19 +56,19 @@ def generar_reporte(carpeta,tiempo):
         os.makedirs("./cambios")
     if nuevos:
         for archivo in nuevos:  
-            escribir_log_cambios("INFO", "Nuevo archivo", f"Archivo={archivo}",tiempo)
+            escribir_log("INFO", "Nuevo archivo", f"Archivo={archivo}",tiempo,"Auditor","cambios","cambios")
             archivos_cambiados += 1
     if eliminados:      
         for archivo in eliminados:
-            escribir_log_cambios("INFO", "Archivo eliminado", f"Archivo={archivo}",tiempo)
+            escribir_log("INFO", "Archivo eliminado", f"Archivo={archivo}",tiempo,"Auditor","cambios","cambios")
             archivos_cambiados += 1
     if modificados:
         for archivo in modificados:
             if estado_actual[archivo][0] != estado_anterior[archivo][0] or estado_actual[archivo][1] != estado_anterior[archivo][1]:
-                escribir_log_cambios("INFO", "Archivo modificado", f"Archivo={archivo}",tiempo)
+                escribir_log("INFO", "Archivo modificado", f"Archivo={archivo}",tiempo,"Auditor","cambios","cambios")
                 archivos_cambiados += 1
     if archivos_cambiados == 0:
-        escribir_log("INFO", "No hay cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
+        escribir_log("INFO", "No hay cambios en la carpeta.", f"Carpeta={carpeta}",tiempo,"Auditor","audit")
     else:
-        escribir_log("INFO", "Se detectaron cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
+        escribir_log("INFO", "Se detectaron cambios en la carpeta.", f"Carpeta={carpeta}",tiempo,"Auditor","audit")
         generar_snapshot(carpeta,tiempo,saltar_comprobacion=True)

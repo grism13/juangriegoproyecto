@@ -55,7 +55,7 @@ def mostrar_menu_seleccion_carpeta():
 def main():
     global carpeta
     # Capturamos el tiempo de inicio UNA sola vez para pasar el mismo timestamp a todos
-    tiempo_inicio = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    tiempo_inicio = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
     
     while True:
         mostrar_menu_principal()
