@@ -2,6 +2,12 @@ import os
 import platform
 import datetime
 
+colores ={ 
+"rojo" : '\033[91m',
+"verde" : '\033[92m',
+"normal": '\033[0m',
+}
+
 def limpiar_pantalla():
     """Limpia la consola según el sistema operativo."""
     sistema = platform.system()

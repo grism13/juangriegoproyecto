@@ -4,7 +4,7 @@ import shutil
 import time
 import utils
 
-def mover_archivo(ruta_origen, carpeta_destino_nombre, carpeta_raiz ):
+def mover_archivo(ruta_origen, carpeta_destino_nombre, carpeta_raiz,tiempo):
 
     # Calculamos la ruta completa de la carpeta destino
     ruta_destino_carpeta = os.path.join(carpeta_raiz, carpeta_destino_nombre)
@@ -19,21 +19,21 @@ def mover_archivo(ruta_origen, carpeta_destino_nombre, carpeta_raiz ):
         # 1. Crear carpeta si no existe 
         if not os.path.exists(ruta_destino_carpeta):
             os.makedirs(ruta_destino_carpeta)
-            print(f" Carpeta creada: {carpeta_destino_nombre}")
+            utils.escribir_log("INFO",f" Carpeta creada: {carpeta_destino_nombre}"," ",tiempo,"Organizer","organizer")
         
         # 2. Mover archivo
         shutil.move(ruta_origen, ruta_final)
-        print(f"Movido: {nombre_archivo} -> {carpeta_destino_nombre}")
+        utils.escribir_log("INFO",f"Movido: {nombre_archivo} -> {carpeta_destino_nombre}"," ",tiempo,"Organizer","organizer")
         
     except Exception as e:
-        print(f"Error moviendo {nombre_archivo}: {e}")
+        utils.escribir_log("ERROR",f"Error moviendo {nombre_archivo}: {e}"," ",tiempo,"Organizer","organizer")
 
 def generar_vista_previa(ruta_origen, carpeta_destino_nombre, carpeta_raiz,nombre_archivo):
     ruta_destino_carpeta = os.path.join(carpeta_raiz, carpeta_destino_nombre,nombre_archivo)
-    print(f"{ruta_origen} -----> {ruta_destino_carpeta}")
+    print(f"{utils.colores["rojo"]}{ruta_origen} {utils.colores["normal"]}-----> {utils.colores["verde"]}{ruta_destino_carpeta}{utils.colores["normal"]}")
     
 
-def organizar_archivos_por_extension(ruta_de_carpeta):
+def organizar_archivos_por_extension(ruta_de_carpeta,tiempo):
     
     #Obtener lista de los archivos
     contenido = os.listdir(ruta_de_carpeta)
@@ -70,12 +70,12 @@ def organizar_archivos_por_extension(ruta_de_carpeta):
             input("Opción no válida, Press enter para continuar..")
     if opcion == "s":
         for ruta_completa,tipo in archivos_a_cambiar:
-            mover_archivo(ruta_completa, tipo, ruta_de_carpeta)
+            mover_archivo(ruta_completa, tipo, ruta_de_carpeta,tiempo)
         input("Se movieron los archivos. Press enter para continuar")
     else:
         input("No se movieron los archivos. Press enter para continuar")
 
-def organizar_archivos_por_espacio(ruta_de_carpeta):
+def organizar_archivos_por_espacio(ruta_de_carpeta,tiempo):
     contenido = os.listdir(ruta_de_carpeta)
     while True:
         utils.limpiar_pantalla()
@@ -110,12 +110,12 @@ def organizar_archivos_por_espacio(ruta_de_carpeta):
             input("Opción no válida, Press enter para continuar..")
     if opcion == "s":
         for ruta_completa, nombre_carpeta in archivos_a_cambiar:
-            mover_archivo(ruta_completa, nombre_carpeta, ruta_de_carpeta)
+            mover_archivo(ruta_completa, nombre_carpeta, ruta_de_carpeta,tiempo)
         input("Se movieron los archivos. Press enter para continuar")
     else:
         input("No se movieron los archivos. Press enter para continuar")
 
-def organizar_archivos_por_fecha(ruta_de_carpeta):
+def organizar_archivos_por_fecha(ruta_de_carpeta,tiempo):
     contenido = os.listdir(ruta_de_carpeta)
     while True:
         utils.limpiar_pantalla()
@@ -145,7 +145,7 @@ def organizar_archivos_por_fecha(ruta_de_carpeta):
             input("Opción no válida, Press enter para continuar..")
     if opcion == "s":
         for ruta_completa, dia_mes_año in archivos_a_cambiar:
-            mover_archivo(ruta_completa, dia_mes_año, ruta_de_carpeta)
+            mover_archivo(ruta_completa, dia_mes_año, ruta_de_carpeta,tiempo)
         input("Se movieron los archivos. Press enter para continuar")
     else:
         input("No se movieron los archivos. Press enter para continuar")

@@ -68,11 +68,11 @@ def main():
                 opcion_org = input("Ingrese la opción: ")
 
                 if opcion_org == "1":
-                    organizer.organizar_archivos_por_espacio(carpeta)
+                    organizer.organizar_archivos_por_espacio(carpeta,tiempo_inicio)
                 elif opcion_org == "2":
-                    organizer.organizar_archivos_por_extension(carpeta)
+                    organizer.organizar_archivos_por_extension(carpeta,tiempo_inicio)
                 elif opcion_org == "3":
-                    organizer.organizar_archivos_por_fecha(carpeta)
+                    organizer.organizar_archivos_por_fecha(carpeta,tiempo_inicio)
                 elif opcion_org == "4":
                     break
                 else:
@@ -132,9 +132,6 @@ def main():
                     print("\n❌ Error: Opción no válida.")
                     input("Presiona Enter para intentar de nuevo...")
                     
-                    
-
-
         elif opcion == "6":
             print("\n¡Hasta luego! Cerrando sistema...")
             break
