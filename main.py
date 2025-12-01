@@ -25,9 +25,20 @@ def mostrar_menu_principal():
     print("6. Salir")
     print("-" * 60)
 
+def mostrar_menu_organizer():
+    """Despliega el menu organizador."""
+    utils.mostrar_encabezado("KIT DE ORGANIZACION (v1.0)")
+    print(f"Trabajando en: {carpeta}")
+    print("1. Organizar archivos por tamaño")
+    print("2. Organizar archivos por extension (PDF, TXT, etc)")
+    print("3. Organizar archivos por fecha")
+    print("3. Salir")
+    print("-" * 60)
+
 def mostrar_menu_auditor():
     """Despliega las opciones del sistema."""
     utils.mostrar_encabezado("KIT DE AUDITORIA (v1.0)")
+    print(f"Trabajando en: {carpeta}")
     print("1. Generar snapshot")
     print("2. Generar reporte")
     print("3. Salir")
@@ -51,25 +62,21 @@ def main():
         opcion = input(">> Selecciona una opción (1-6): ").strip()
 
         if opcion == "1":
-            # --- ORGANIZADOR ---
-            print("\n--- MÓDULO ORGANIZADOR ---")
-            # Ya no pedimos ruta aquí, usamos la variable 'carpeta' global
-            print(f"Trabajando en: {carpeta}")
-            
-            opcion_org = organizer.pedir_opcion() # Eliezer debe asegurarse que esta función retorne "1", "2" o "3"
+            while True:
+                mostrar_menu_organizer()
+                
+                opcion_org = input("Ingrese la opción: ")
 
-            if opcion_org == "1":
-                organizer.organizar_archivos_por_espacio(carpeta)
-            elif opcion_org == "2":
-                organizer.organizar_archivos_por_extension(carpeta)
-            elif opcion_org == "3":
-                organizer.organizar_archivos_por_fecha(carpeta)
-            else:
-                print("Opción no válida en organizador.")
-
-            # Registrar acción en auditoría (Opcional pero recomendado)
-            auditor.escribir_log("INFO", "Ejecutado Organizador", f"Opción={opcion_org}", tiempo_inicio)
-            input("Presione ENTER para continuar...")
+                if opcion_org == "1":
+                    organizer.organizar_archivos_por_espacio(carpeta)
+                elif opcion_org == "2":
+                    organizer.organizar_archivos_por_extension(carpeta)
+                elif opcion_org == "3":
+                    organizer.organizar_archivos_por_fecha(carpeta)
+                elif opcion_org == "4":
+                    break
+                else:
+                    input("Opción no válida . Prees enter para continuar...")
             
         elif opcion == "2":
             # --- ANALIZADOR ---
