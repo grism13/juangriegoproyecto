@@ -48,7 +48,7 @@ def main():
         if opcion == "1":
             print("Iniciando Modulo Organizador...")
             #Se obtiene ruta y opcion de organizacion
-            carpeta = organizer.pedir_ruta()
+            #carpeta = organizer.pedir_ruta()
             opcion = organizer.pedir_opcion()
 
             if opcion == "1":

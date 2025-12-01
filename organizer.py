@@ -2,7 +2,7 @@
 import os
 import shutil
 import time
-
+"""
 def pedir_ruta():
     ruta_de_carpeta = input("Ingrese la ruta donde se encuentra su archivo: ")
 
@@ -12,7 +12,7 @@ def pedir_ruta():
         ruta_de_carpeta = input("Ingrese la ruta donde se encuentra su archivo: ")
 
     return ruta_de_carpeta
-
+"""
 def pedir_opcion():
       respuesta = input("""Perfecto. Ahora es necesario que ingrese una de estas opciones (Solo se permiten respuestas en numeros enteros del 1 al 3):
 1) Organizar archivos por tamaño
