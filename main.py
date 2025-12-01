@@ -32,7 +32,7 @@ def mostrar_menu_organizer():
     print("1. Organizar archivos por tamaño")
     print("2. Organizar archivos por extension (PDF, TXT, etc)")
     print("3. Organizar archivos por fecha")
-    print("3. Salir")
+    print("4. Salir")
     print("-" * 60)
 
 def mostrar_menu_auditor():
