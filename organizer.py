@@ -3,26 +3,6 @@ import os
 import shutil
 import time
 import utils
-"""
-def pedir_ruta():
-    ruta_de_carpeta = input("Ingrese la ruta donde se encuentra su archivo: ")
-
-    #Ejecuta este bucle hasta que el usuario ingrese una ruta existente
-    while not os.path.exists(ruta_de_carpeta):
-        print("Ingrese una ruta existente para continuar...")   
-        ruta_de_carpeta = input("Ingrese la ruta donde se encuentra su archivo: ")
-
-    return ruta_de_carpeta
-"""
-
-#Eliminar esta función y trasladar su funcionalidad al main
-def pedir_opcion():
-      respuesta = input("""Perfecto. Ahora es necesario que ingrese una de estas opciones (Solo se permiten respuestas en numeros enteros del 1 al 3):
-1) Organizar archivos por tamaño
-2) Organizar archivos por extension (PDF, TXT, etc)
-3) Organizar archivos por fecha
-""")
-      return respuesta
 
 def mover_archivo(ruta_origen, carpeta_destino_nombre, carpeta_raiz ):
 
