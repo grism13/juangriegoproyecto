@@ -104,4 +104,4 @@ def generar_reporte(carpeta,tiempo):
         escribir_log("INFO", "No hay cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
     else:
         escribir_log("INFO", "Se detectaron cambios en la carpeta.", f"Carpeta={carpeta}",tiempo)
-    generar_snapshot(carpeta,tiempo,saltar_comprobacion=True)
+        generar_snapshot(carpeta,tiempo,saltar_comprobacion=True)
