@@ -9,8 +9,8 @@ import os
 # Por ahora los dejaremos comentados o simularemos que funcionan.
 # import organizer
 # import analyzer
-
 # import reports
+
 carpeta = "./test_samples"
 
 def mostrar_menu_principal():
@@ -51,7 +51,7 @@ def main():
         if opcion == "1":
             print("Iniciando Modulo Organizador...")
             #Se obtiene ruta y opcion de organizacion
-            carpeta = organizer.pedir_ruta()
+            #carpeta = organizer.pedir_ruta()
             opcion = organizer.pedir_opcion()
 
             if opcion == "1":
@@ -104,7 +104,7 @@ def main():
                     while True:
                         utils.limpiar_pantalla()
                         ruta = input("Introduzca la ruta de la carpeta:")
-                        if os.path.exists(ruta) and ruta != "./":
+                        if os.path.exists(ruta) and ruta not in ["./","./logs","./env"]:
                             carpeta = ruta 
                             break
                         else:
