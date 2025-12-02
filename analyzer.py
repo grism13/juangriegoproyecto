@@ -95,6 +95,21 @@ def obtener_patrones():
         }
     }
     
+
+
+#GENERADOR
+def leer_archivo_eficiente(ruta_archivo):
+    try:
+        # Abrimos el archivo
+        with open(ruta_archivo, 'r', encoding='utf-8', errors='ignore') as archivo:
+            for linea in archivo:
+                yield linea  # <--- Esto entrega la línea y pausa (Generador)
+    except FileNotFoundError:
+        print(f" Error: No se encontró el archivo: {ruta_archivo}")
+    except Exception as e:
+        print(f" Error leyendo el archivo: {e}")
+
+#FUNCIÓN PRINCIPAL DEL ANALIZADOR
 def analizador_archivos(ruta_archivo, opcion):
     patrones = obtener_patrones()
     
@@ -105,30 +120,26 @@ def analizador_archivos(ruta_archivo, opcion):
     regex_seleccionado = patrones[opcion]["regex"]
     nombre_patron = patrones[opcion]["nombre"]
     
+    print(f"Analizando '{os.path.basename(ruta_archivo)}' buscando {nombre_patron}...")
+    
     resultados = []
+
     
-    try:
-        # Usamos errors='ignore' para evitar que se rompa con archivos binarios o raros
-        with open(ruta_archivo, 'r', encoding='utf-8', errors='ignore') as archivo:
-            
-            # USO DE ENUMERATE (Más pythonico y seguro para contar líneas)
-            for numero_linea, linea in enumerate(archivo, 1):
-                
-                encontrados = re.findall(regex_seleccionado, linea)
-                
-                if encontrados:
-                    for hallazgo in encontrados:
-                        resultados.append({
-                            "linea": numero_linea,
-                            "valor": hallazgo,
-                            "tipo": nombre_patron
-                        })
+  
+    generador = leer_archivo_eficiente(ruta_archivo)
     
-    except Exception as e:
-        print(f"Error raro leyendo el archivo: {e}")
-        return []
+    # Recorremos el generador línea por línea
+    for numero_linea, linea in enumerate(generador, 1):
+        
+        # Buscamos coincidencias en esa línea específica
+        encontrados = re.findall(regex_seleccionado, linea)
+        
+        if encontrados:
+            for hallazgo in encontrados:
+                resultados.append({
+                    "linea": numero_linea,
+                    "valor": hallazgo,
+                    "tipo": nombre_patron
+                })
 
     return resultados
-    
-    
-    
