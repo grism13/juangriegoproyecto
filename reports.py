@@ -6,7 +6,7 @@ import os
 import utils
 from datetime import datetime
 
-#archivos de prueba (eliminar luego en base a otros modulos)
+#Variables y listas importantes de referencia
 logs = "logs"
 cambios= "cambios"
 carpeta_reportes = "reportes"
@@ -23,7 +23,7 @@ def leer_archivos(directorio, extension=".log"):
         if nombre_archivo.endswith(extension): #Busca si termina en .log
             filepath = os.path.join(directorio, nombre_archivo)
             try:
-                with open(filepath, 'r', encoding='utf-8') as archivo: # Almacenamos el nombre del archivo y todas sus líneas
+                with open(filepath, 'r', encoding='utf-8') as archivo: #Almacenamos el nombre del archivo y todas sus líneas
                     data.append({
                         "origen": directorio,
                         "nombre_archivo": nombre_archivo,
@@ -176,7 +176,7 @@ def generar_reporte(formato='txt', modulo_filtro=None, prefijo= "general"):
     registros_finales = []
     
     if filtro_normalizado and filtro_normalizado != 'todos':
-    # Filtramos la lista de registros
+    #Filtramos la lista de registros
         registros_finales = [
             registro for registro in todos_los_registros 
             if registro["modulo"].strip().lower() == filtro_normalizado
@@ -240,7 +240,7 @@ def escribir_reporte_csv(ruta_completa_archivo, registros):
     except Exception as error:
         print(f"Error al escribir el archivo CSV: {error}")
 
-#Flujo del módulo (añadir a main)
+#Flujo del módulo
 
 def iniciar_modulo_reportes(): 
     """Función principal que ejecuta el flujo del módulo reports.py"""
@@ -307,7 +307,7 @@ def iniciar_modulo_reportes():
             continue
 
         try:
-            generar_reporte(formato=formato, modulo_filtro=modulo_a_filtrar, prefijo=prefijo_archivo)
+            generar_reporte(formato=formato, modulo_filtro=modulo_a_filtrar, prefijo=prefijo_archivo) #Se genera el reporte en base a los parámetros
             
         except Exception as error:
             print(f"\n[ERROR] No se pudo generar el reporte: {error}")
