@@ -2,72 +2,130 @@ import sys
 import utils  # Importamos tus herramientas
 import datetime
 import auditor
+import organizer
 import analyzer
+import reports
+import os
 
-# Estos imports darán error hasta que tus compañeros creen sus funciones.
+
 # Por ahora los dejaremos comentados o simularemos que funcionan.
-# import organizer
-# import analyzer
 
-# import reports
+carpeta = "./test_samples" #carpeta de ejemplo
 
 def mostrar_menu_principal():
     """Despliega las opciones del sistema."""
     utils.mostrar_encabezado("KIT DE AUTOMATIZACIÓN DE ARCHIVOS (v1.0)")
-    print("1. [Organizador]  Clasificar y ordenar archivos")
-    print("2. [Analizador]   Buscar patrones y contenido")
-    print("3. [Auditor]      Detectar cambios en carpetas")
-    print("4. [Reportes]     Generar informes (CSV/TXT)")
-    print("5. Salir")
+    print("Hola! Soy Capitán Folder y estoy aquí para ayudare a combatir contra el desorden, dime que opción deseas y empezamos")
+    print(f"Carpeta=  {carpeta}")
+    print("1. [ORGANIZADOR] :  Clasificar y ordenar archivos")
+    print("2. [ANALIZADOR] :  Buscar patrones y contenido")
+    print("3. [AUDITOR]  :    Detectar cambios en carpetas")
+    print("4. [REPORTES]  :   Generar informes (CSV/TXT)")
+    print("5. CAMBIAR CARPETA")
+    print("6. Salir")
+    print("-" * 60)
+
+def mostrar_menu_organizer():
+    """Despliega el menu organizador."""
+    utils.mostrar_encabezado("KIT DE ORGANIZACION (v1.0)")
+    print(f"Trabajando en: {carpeta}")
+    print("1. Organizar archivos por tamaño")
+    print("2. Organizar archivos por extension (PDF, TXT, etc)")
+    print("3. Organizar archivos por fecha")
+    print("3. Salir")
     print("-" * 60)
 
 def mostrar_menu_auditor():
     """Despliega las opciones del sistema."""
     utils.mostrar_encabezado("KIT DE AUDITORIA (v1.0)")
+    print(f"Trabajando en: {carpeta}")
     print("1. Generar snapshot")
     print("2. Generar reporte")
     print("3. Salir")
     print("-" * 60)
 
 def main():
-    tiempo_inicio = datetime.datetime.now().strftime("%Y-%m-%d %H-%M")
+    global carpeta
+    # Capturamos el tiempo de inicio UNA sola vez para pasar el mismo timestamp a todos
+    tiempo_inicio = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
+    
     while True:
         mostrar_menu_principal()
-        opcion = input(">> Selecciona una opción (1-5): ").strip()
+        opcion = input(">> Selecciona una opción (1-6): ").strip()
 
         if opcion == "1":
-            # Aquí llamaremos a: organizer.iniciar()
-            print("\n🚧 Módulo del Organizador (Eliezer) en construcción...")
+            auditor.generar_snapshot(carpeta,tiempo_inicio,True)            
+            while True:
+                mostrar_menu_organizer()
+                
+                opcion_org = input("Ingrese la opción: ")
+
+                if opcion_org == "1":
+                    organizer.organizar_archivos_por_espacio(carpeta,tiempo_inicio)
+                elif opcion_org == "2":
+                    organizer.organizar_archivos_por_extension(carpeta,tiempo_inicio)
+                elif opcion_org == "3":
+                    organizer.organizar_archivos_por_fecha(carpeta,tiempo_inicio)
+                elif opcion_org == "4":
+                    break
+                else:
+                    input("Opción no válida . Prees enter para continuar...")
+            
+        elif opcion == "2":
+            # --- ANALIZADOR ---
+            # Si Roand tiene su función lista:
+            # analyzer.iniciar_analizador(carpeta)
+            print("\n🚧 Módulo del Analizador (Roand) en construcción...")
             input("Presiona Enter para volver...")
 
-        elif opcion == "2":
-            # Aquí llamaremos a: analyzer.iniciar()
-            analyzer.menu_analizador() 
-            
-
         elif opcion == "3":
+            # --- AUDITOR ---
             while True:
                 mostrar_menu_auditor()
-                opcion = input(">> Selecciona una opción (1-5): ").strip()
+                op_aud = input(">> Selecciona una opción (1-3): ").strip()
+                
+                if op_aud == "1":
+                    auditor.generar_snapshot(carpeta, tiempo_inicio)
+                    input("Snapshot generado. Enter para continuar...")
+                elif op_aud == "2":
+                    auditor.generar_reporte(carpeta, tiempo_inicio)
+                    input("Reporte de cambios generado. Enter para continuar...")
+                elif op_aud == "3":
+                    break
+                else:
+                    print("Opción no válida.")
+
+        elif opcion == "4":
+            # --- REPORTES ---
+            # Llamamos a la función principal de Juan
+            # Le pasamos None por ahora porque no estamos guardando datos en memoria
+            # Pero su módulo sabe leer el audit.log
+            reports.iniciar_modulo_reportes() 
+            input("Presiona Enter para volver...")
+
+        elif opcion == "5":
+            #Menu para cambiar la carpeta
+            while True:
+                mostrar_menu_seleccion_carpeta()
+                opcion = input(">> Selecciona una opción (1-2): ").strip()
                 if opcion == "1":
-                    auditor.generar_snapshot("./test_samples",tiempo_inicio)
-                    input("Presiona Enter para volver...")
+                    while True:
+                        utils.limpiar_pantalla()
+                        ruta = input("Introduzca la ruta de la carpeta:")
+                        if os.path.exists(ruta) and ruta not in ["./","./logs","./env"]:
+                            carpeta = ruta 
+                            break
+                        else:
+                            input("Opción no Valida , presione enter para continuar...")
+                            continue
                 elif opcion == "2":
-                    auditor.generar_reporte("./test_samples",tiempo_inicio)
-                    input("Presiona Enter para volver...")
-                elif opcion == "3":
+                    input("Saliendo, press enter para continuar...")
                     break
                 else:
                     print("\n❌ Error: Opción no válida.")
                     input("Presiona Enter para intentar de nuevo...")
-            input("Presiona Enter para volver...")
-
-        elif opcion == "4":
-            # Aquí llamaremos a: reports.iniciar()
-            print("\n🚧 Módulo de Reportes (Juan) en construcción...")
-            input("Presiona Enter para volver...")
-
-        elif opcion == "5":
+                    
+        elif opcion == "6":
             print("\n¡Hasta luego! Cerrando sistema...")
             break
         
