@@ -155,13 +155,7 @@ if not os.path.exists(carpeta_reportes):
 #Funciones para generar los reportes y archivos .csv ó .txt
 
 def generar_reporte(formato='txt', modulo_filtro=None, prefijo= "general"):
-    """
-    Función principal que compila todos los datos, filtra por módulo (opcional)
-    y genera el reporte.
-    :param formato: 'txt' o 'csv'
-    :param modulo_filtro: Nombre del módulo a filtrar ('organizer', 'auditor', 'analyzer', 'cambios') o None para todos.
-    """
-    
+    """Función principal que compila todos los datos ó filtra por módulo y genera el reporte."""
     #Normalizar el filtro a minúsculas
     filtro_normalizado = modulo_filtro.lower() if modulo_filtro else None
 
@@ -244,6 +238,7 @@ def escribir_reporte_csv(ruta_completa_archivo, registros):
 
 def iniciar_modulo_reportes(): 
     """Función principal que ejecuta el flujo del módulo reports.py"""
+    utils.limpiar_pantalla()
     while True:
         print("\n--- MÓDULO DE REPORTES ---")
         print("¡Bienvenido al módulo de reportes!\nAcá podrás generar reportes sobre el historial de logs y cambios del sistema.")

@@ -94,8 +94,6 @@ def main():
         elif opcion == "4":
             # --- REPORTES ---
             # Llamamos a la función principal de Juan
-            # Le pasamos None por ahora porque no estamos guardando datos en memoria
-            # Pero su módulo sabe leer el audit.log
             reports.iniciar_modulo_reportes() 
             input("Presiona Enter para volver...")
 
