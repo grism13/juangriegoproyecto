@@ -72,11 +72,7 @@ def main():
                     input("Opción no válida . Prees enter para continuar...")
             
         elif opcion == "2":
-            # --- ANALIZADOR ---
-            # Si Roand tiene su función lista:
-            # analyzer.iniciar_analizador(carpeta)
-            print("\n🚧 Módulo del Analizador (Roand) en construcción...")
-            input("Presiona Enter para volver...")
+            analyzer.menu_analizador()
 
         elif opcion == "3":
             # --- AUDITOR ---
