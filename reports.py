@@ -245,7 +245,7 @@ def iniciar_modulo_reportes():
         print("\n--- Opciones de Reporte de Historial ---")
         print("1. Historial de Auditoría (Todos los logs y cambios)")
         print("2. Resumen de organización")
-        print("3. Historial de auditoría")
+        print("3. Récord del auditor")
         print("4. Hallazgos de análisis")
         print("5. Volver al menú principal")
         print("")
