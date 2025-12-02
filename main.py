@@ -12,6 +12,15 @@ import os
 
 carpeta = "./test_samples" #carpeta de ejemplo
 
+
+def mostrar_menu_seleccion_carpeta():
+    """Despliga el menu de carpetas"""
+    utils.mostrar_encabezado("SELECCIONADOR DE CARPETAS (v1.0)")
+    print(f"Carpeta actual: {carpeta}")
+    print("1. Cambiar carpeta")
+    print("2. Salir")
+    print("-" * 60)
+
 def mostrar_menu_principal():
     """Despliega las opciones del sistema."""
     utils.mostrar_encabezado("KIT DE AUTOMATIZACIÓN DE ARCHIVOS (v1.0)")
