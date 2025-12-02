@@ -32,7 +32,7 @@ def mostrar_menu_organizer():
     print("1. Organizar archivos por tamaño")
     print("2. Organizar archivos por extension (PDF, TXT, etc)")
     print("3. Organizar archivos por fecha")
-    print("3. Salir")
+    print("4. Salir")
     print("-" * 60)
 
 def mostrar_menu_auditor():
@@ -94,8 +94,6 @@ def main():
         elif opcion == "4":
             # --- REPORTES ---
             # Llamamos a la función principal de Juan
-            # Le pasamos None por ahora porque no estamos guardando datos en memoria
-            # Pero su módulo sabe leer el audit.log
             reports.iniciar_modulo_reportes() 
             input("Presiona Enter para volver...")
 

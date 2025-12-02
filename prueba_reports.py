@@ -2,33 +2,28 @@
 import reports
 import os
 
-# --- SIMULACIÓN DE DATOS TEMPORALES ---
-# Imaginemos que el usuario ya corrió la opción "Organizar" y "Analizar"
-# y el programa principal tiene estos datos en memoria:
-
-datos_org_simulados = [
-    {"Archivo": "foto.jpg", "Acción": "Movido", "Destino": "/Imagenes"},
-    {"Archivo": "tesis.doc", "Acción": "Ignorado", "Destino": "N/A"}
-]
-
-datos_ana_simulados = [
-    {"Archivo": "datos.txt", "Patrón": "Email", "Hallazgo": "juan@gmail.com", "Línea": 10},
-    {"Archivo": "datos.txt", "Patrón": "Telf", "Hallazgo": "0414-1234567", "Línea": 15}
-]
-
-# Crear un audit.log falso si no existe para probar la opción 3
-if not os.path.exists("audit.log"):
-    with open("audit.log", "w") as f:
-        f.write("[2023-11-28 10:00:00] INICIO: Sistema arrancado.\n")
-        f.write("[2023-11-28 10:05:00] ORG: Se organizaron 2 archivos.\n")
-
 # --- EJECUTAR EL FLUJO ---
 print("Iniciando simulación del menú principal...")
 
 # Llamamos a la función principal del módulo reportes pasando los datos simulados
-reports.iniciar_modulo_reportes(
-    datos_organizacion_temp=datos_org_simulados,
-    datos_analisis_temp=datos_ana_simulados
-)
+reports.iniciar_modulo_reportes()
 
 print("\nVolvimos al menú principal simulado. Fin de la prueba.")
+
+#Decorador para registrar en el audit.log todos los reportes generados
+def registro_reporte_log(funcion):
+    """Registra en audit.log cuando se genera un archivo."""
+    def wrapper(*args, **kwargs):
+        ruta_archivo = args[0] if args else "Desconocido"
+        try:
+            resultado = funcion(*args, **kwargs)
+            #Si la función no lanzó excepción, registramos el éxito
+            tiempo = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") #Genera el tiempo de creación del reporte
+            mensaje = f"[{tiempo}] REPORTES: Archivo generado exitosamente: {ruta_archivo}\n"
+            with open(cambios, "a", encoding='utf-8') as log: #Se registra al final del log el mensaje
+                log.write(mensaje)
+            return resultado
+        except Exception as error: #Con esto se revisan todos los errores que están dentro de la clase de Exception
+            print(f"[ERROR] Fallo al generar reporte o registrar log: {error}")
+            raise #Relanzamos para que el menú lo maneje
+    return wrapper
