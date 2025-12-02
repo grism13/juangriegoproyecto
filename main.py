@@ -44,14 +44,6 @@ def mostrar_menu_auditor():
     print("3. Salir")
     print("-" * 60)
 
-def mostrar_menu_seleccion_carpeta():
-    """Despliga el menu de carpetas"""
-    utils.mostrar_encabezado("SELECCIONADOR DE CARPETAS (v1.0)")
-    print(f"Carpeta actual: {carpeta}")
-    print("1. Cambiar carpeta")
-    print("2. Salir")
-    print("-" * 60)
-
 def main():
     global carpeta
     # Capturamos el tiempo de inicio UNA sola vez para pasar el mismo timestamp a todos
@@ -62,6 +54,7 @@ def main():
         opcion = input(">> Selecciona una opción (1-6): ").strip()
 
         if opcion == "1":
+            auditor.generar_snapshot(carpeta,tiempo_inicio,True)            
             while True:
                 mostrar_menu_organizer()
                 
@@ -79,11 +72,7 @@ def main():
                     input("Opción no válida . Prees enter para continuar...")
             
         elif opcion == "2":
-            # --- ANALIZADOR ---
-            # Si Roand tiene su función lista:
-            # analyzer.iniciar_analizador(carpeta)
-            print("\n🚧 Módulo del Analizador (Roand) en construcción...")
-            input("Presiona Enter para volver...")
+            analyzer.menu_analizador()
 
         elif opcion == "3":
             # --- AUDITOR ---
