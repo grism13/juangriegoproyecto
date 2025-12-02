@@ -2,28 +2,27 @@ import re
 import os
 import utils
 
-def menu_analizador():
+def menu_analizador(carpeta,tiempo):
    
-    carpeta = input("Ingresa la ruta de la carpeta (Enter para actual): ").strip()
-    if not carpeta: carpeta = "./test_samples"
-    
-    if not os.path.exists(carpeta):
-        print("Esa carpeta no existe.")
-        return
-
     archivos = [f for f in os.listdir(carpeta) if os.path.isfile(os.path.join(carpeta, f))]
     if not archivos:
-        print("Carpeta vacía.")
+        utils.escribir_log("WARM","Carpeta vacía.",f"Carpeta ={carpeta}",tiempo,"Analyzer","analyzer")
         return
-
-    utils.mostrar_encabezado("Selecciona un archivo")
-    for i, archivo in enumerate(archivos, 1):
-        print(f"{i}. {archivo}")
-    
-    seleccion = input("\nElige el número del archivo: ")
-    if not seleccion.isdigit() or int(seleccion) < 1 or int(seleccion) > len(archivos):
-        print("Opción inválida.")
-        return
+    while True:
+        utils.mostrar_encabezado("Selecciona un archivo")
+        for i, archivo in enumerate(archivos, 1):
+            print(f"{i}. {archivo}")
+        print(f"{i+1}. Salir")
+        
+        seleccion = input("\nElige el número del archivo: ")
+        if not seleccion.isdigit() or int(seleccion) < 1 or int(seleccion) > len(archivos) + 1:
+            input("Opción inválida. Press enter para continuar..")
+            continue 
+        elif int(seleccion) == len(archivos)+1:
+            input("Saliendo. Press enter para continuar...")
+            return
+        else:
+            break
     
     
     archivo_a_analizar = os.path.join(carpeta, archivos[int(seleccion)-1])
@@ -37,10 +36,10 @@ def menu_analizador():
         for clave, valor in patrones.items():
             print(f"{clave}. {valor['nombre']}")
         
-        opcion = input("\nElige una opción (1-4): ")
+        opcion = input("\nElige una opción (1-8): ")
         
         
-        resultados = analizador_archivos(archivo_a_analizar, opcion)
+        resultados = analizador_archivos(archivo_a_analizar, opcion,tiempo)
         
         # --- MOSTRAR RESULTADOS Y RESUMEN ---
         if resultados:
@@ -48,10 +47,11 @@ def menu_analizador():
             
             # Mostrar detalle (limitado a 10)
             for i, item in enumerate(resultados):
+                i += 1
                 if i < 10:
-                    print(f"Línea {item['linea']}: {item['valor']}")
+                    utils.escribir_log("INFO","Resultado encontrado",f"Línea {item['linea']}: {item['valor']}",tiempo,"Analyzer","analyzer")
                 else:
-                    print(f"... y {len(resultados) - 10} más.")
+                    utils.escribir_log("INFO","Resultado encontrado",f"... y {len(resultados) - 10} más.",tiempo,"Analyzer","alyzer")
                     break
             
             # Generar Estadísticas
@@ -64,10 +64,10 @@ def menu_analizador():
             mas_comunes = sorted(conteo.items(), key=lambda x: x[1], reverse=True)[:5]
             
             for valor, cantidad in mas_comunes:
-                print(f"'{valor}' aparece {cantidad} veces.")
+                utils.escribir_log("INFO","Frecuencia",f"'{valor}' aparece {cantidad} veces.",tiempo,"Analyzer","analizer")
                 
         else:
-            print("No se encontraron coincidencias.")
+            utils.escribir_log("WARM","No se encontraron coincidencias."," ",tiempo,"Analyzer","analyzer")
         
         # PREGUNTA CLAVE
         continuar = input("\n¿Quieres buscar OTRO patrón en este MISMO archivo? (s/n): ").strip().lower()
@@ -78,47 +78,67 @@ def menu_analizador():
 def obtener_patrones():
     return {
         "1": {
-            "nombre": "Correos Electrónicos",
+            "nombre": "Correos Electrónicos 'hola@email.com'",
             "regex": r"[\w\.-]+@[\w\.-]+\.\w+"
         },
         "2": {
-            "nombre": "Teléfonos (Ej. 0414-1234567)",
+            "nombre": "Teléfonos '0414-1234567'",
             "regex": r"\d{4}-\d{7}" 
         },
         "3": {
-            "nombre": "Fechas (dd/mm/aaaa)",
+            "nombre": "Fechas 'dd/mm/aaaa'",
             "regex": r"\d{2}/\d{2}/\d{4}"
         }, 
         "4": {
-            "nombre": "Palabra ''",
-            "regex": r"\b\b"
+            "nombre": "Hastags '#programacion'",
+            "regex": r"#[a-zA-Z0-9_]+"
+        },
+        "5" : {
+            "nombre": "URls 'https://www.google.com/'",
+            "regex" : r"(?:https?://|www\.)[\w.-]+\.[a-zA-Z]{2,}(?:/[\w\-._~:/?#[\]@!$&\'()*+,;=%]*)?"
+        },
+        "6" : {
+            "nombre": "Precios '$1,500.00, 200 EUR, 50 dolares, Bs 500,00'",
+            "regex" : r"(?:(?:US\$|C\$|\$|€|£|¥|Bs\.?|S/)\s?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,2})?|\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,2})?\s?(?:\$|€|£|¥|Bs\.?|USD|EUR|VES|MXN|dólares|dolares|euros|bolívares|bolivares|pesos)\b)"
+        },
+        "7" :{
+            "nombre": "Ips '8.8.8.8'",
+            "regex" : r"\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\b"           
+        },
+        "8" : {
+            "nombre": "Palabra personalizada 'hola'",
+            "regex" : None
         }
     }
     
 
 
 #GENERADOR
-def leer_archivo_eficiente(ruta_archivo):
+def leer_archivo_eficiente(ruta_archivo,tiempo):
     try:
         # Abrimos el archivo
         with open(ruta_archivo, 'r', encoding='utf-8', errors='ignore') as archivo:
             for linea in archivo:
                 yield linea  # <--- Esto entrega la línea y pausa (Generador)
     except FileNotFoundError:
-        print(f" Error: No se encontró el archivo: {ruta_archivo}")
+        utils.escribir_log("ERROR","Error archivo no encontrado",f"No se encontró el archivo: {ruta_archivo}",tiempo,"Analyzer","analyzer")
     except Exception as e:
-        print(f" Error leyendo el archivo: {e}")
+        utils.escribir_log("ERROR",f" Error leyendo el archivo en: {ruta_archivo}",f"Error : {e}",tiempo,"Analyzer","analyzer")
 
 #FUNCIÓN PRINCIPAL DEL ANALIZADOR
-def analizador_archivos(ruta_archivo, opcion):
+def analizador_archivos(ruta_archivo, opcion,tiempo):
     patrones = obtener_patrones()
     
     if opcion not in patrones:
         print("Esa opción no está disponible")
         return []
-
-    regex_seleccionado = patrones[opcion]["regex"]
-    nombre_patron = patrones[opcion]["nombre"]
+    if opcion == "8":
+        palabra = input("Ingrese la palabra a buscar:")
+        regex_seleccionado = fr"\b{re.escape(palabra)}\b"
+        nombre_patron = f"Palabra {palabra}"
+    else:    
+        regex_seleccionado = patrones[opcion]["regex"]
+        nombre_patron = patrones[opcion]["nombre"]
     
     print(f"Analizando '{os.path.basename(ruta_archivo)}' buscando {nombre_patron}...")
     
@@ -126,7 +146,7 @@ def analizador_archivos(ruta_archivo, opcion):
 
     
   
-    generador = leer_archivo_eficiente(ruta_archivo)
+    generador = leer_archivo_eficiente(ruta_archivo,tiempo)
     
     # Recorremos el generador línea por línea
     for numero_linea, linea in enumerate(generador, 1):
