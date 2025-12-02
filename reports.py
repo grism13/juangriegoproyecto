@@ -43,38 +43,55 @@ def obtener_datos_logs():
             linea = linea.strip()
             if linea:
                 try:
-                    #Separar la marca de tiempo/milisegundos
-                    timestamp_milisegundos, resto_log = linea.split(' ', 1)
-                    fecha_hora = timestamp_milisegundos.split(',')[0] # YYYY-MM-DD
+                    #1. Separar la marca de tiempo/milisegundos
+                    #Dividimos la línea en 3 partes: [Fecha], [Hora,milisegundos], [Resto del log]
+                    partes = linea.split(' ', 2)
+                    
+                    if len(partes) < 3:
+                        raise ValueError("No se pudo obtener la fecha y hora completas.")
+
+                    fecha = partes[0] #Ej: 2025-12-01
+                    hora_milisegundos_y_nivel = partes[1]
                         
-                    #Extraer nivel [primer corchete] y módulo [segundo corchete]
+                    fecha = partes[0] #Ej: 2025-12-01
+                    hora_milisegundos_y_nivel = partes[1]
+                    
+                    #Capturamos la hora: "HH:MM:SS"
+                    hora = hora_milisegundos_y_nivel.split(',')[0].strip()
+                    
+                    #Reconstruimos el campo fecha_hora final (Ej: "2025-12-01 HH:MM:SS")
+                    fecha_hora = f"{fecha} {hora}" 
+                    
+                    # El resto del log comienza en la posición 2 del split
+                    resto_log_sin_fecha = partes[2]
+                    
+                    #2. Extraer nivel [primer corchete]
+                    inicio_nivel = resto_log_sin_fecha.find('[')
+                    fin_nivel = resto_log_sin_fecha.find(']', inicio_nivel)
+                    nivel = resto_log_sin_fecha[inicio_nivel:fin_nivel+1].strip('[]').upper()
                         
-                    # Extraer el primer corchete (nivel)
-                    inicio_nivel = resto_log.find('[')
-                    fin_nivel = resto_log.find(']', inicio_nivel)
-                    nivel = resto_log[inicio_nivel:fin_nivel+1].strip('[]').upper() #Nivel del log
-                        
-                    # Extraer el segundo corchete (módulo)
-                    resto_despues_nivel = resto_log[fin_nivel+1:].strip()
+                    #3. Extraer el segundo corchete (Módulo)
+                    resto_despues_nivel = resto_log_sin_fecha[fin_nivel+1:].strip()
                     inicio_modulo = resto_despues_nivel.find('[')
                     fin_modulo = resto_despues_nivel.find(']', inicio_modulo)
                         
                     if inicio_modulo != -1 and fin_modulo != -1:
-                        modulo_nombre = resto_despues_nivel[inicio_modulo:fin_modulo+1].strip('[]').lower() #El módulo del log
+                        modulo_nombre_crudo = resto_despues_nivel[inicio_modulo:fin_modulo+1].strip('[]')
+                        modulo_nombre = modulo_nombre_crudo.strip().lower() 
                             
-                        #Extraer la descripción del log
                         descripcion = resto_despues_nivel[fin_modulo+1:].strip()
 
                         registros_logs.append({
                             "fecha_hora": fecha_hora,
-                            "modulo": modulo_nombre,
+                            "modulo": modulo_nombre, 
                             "tipo": nivel,
                             "descripcion": descripcion
                         })
+                
                 except Exception as error:
-                    print(f"Error en la línea de log: {error}. Línea: {linea}")
+                    print(f"Error en línea de cambio: {error}. Línea: {linea}")
 
-        return registros_logs
+    return registros_logs
 
 def obtener_datos_cambios():
     """Lee la información de la carpeta cambios."""
@@ -87,21 +104,36 @@ def obtener_datos_cambios():
             if linea:
                 try:
                     #1. Separar la marca de tiempo/milisegundos
-                    timestamp_milisegundos, resto_log = linea.split(' ', 1)
-                    fecha_hora = timestamp_milisegundos.split(',')[0] # YYYY-MM-DD
+                    partes = linea.split(' ', 2)
+                    
+                    if len(partes) < 3:
+                        raise ValueError("No se pudo obtener la fecha y hora completas.")
                         
+                    fecha = partes[0] # Ej: 2025-12-01
+                    hora_milisegundos_y_nivel = partes[1]
+                    
+                    #Capturamos la hora: "HH:MM:SS" (cortando en la coma y limpiando)
+                    hora = hora_milisegundos_y_nivel.split(',')[0].strip()
+                    
+                    #Reconstruimos el campo fecha_hora final (Ej: "2025-12-01 HH:MM:SS")
+                    fecha_hora = f"{fecha} {hora}"
+                    
+                    #El resto del log comienza en la posición 2 del split
+                    resto_log_sin_fecha = partes[2]
+                    
                     #2. Extraer nivel [primer corchete]
-                    inicio_nivel = resto_log.find('[')
-                    fin_nivel = resto_log.find(']', inicio_nivel)
-                    nivel = resto_log[inicio_nivel:fin_nivel+1].strip('[]').upper()
+                    inicio_nivel = resto_log_sin_fecha.find('[')
+                    fin_nivel = resto_log_sin_fecha.find(']', inicio_nivel)
+                    nivel = resto_log_sin_fecha[inicio_nivel:fin_nivel+1].strip('[]').upper()
                         
                     #3. Extraer el segundo corchete y la descripción
-                    resto_despues_nivel = resto_log[fin_nivel+1:].strip()
+                    resto_despues_nivel = resto_log_sin_fecha[fin_nivel+1:].strip()
                     inicio_modulo = resto_despues_nivel.find('[')
                     fin_modulo = resto_despues_nivel.find(']', inicio_modulo)
                         
                     if inicio_modulo != -1 and fin_modulo != -1:
-                        # Extraer la descripción
+                        #Extraemos el módulo en el log, pero lo ignoramos para la etiqueta final
+                        
                         descripcion = resto_despues_nivel[fin_modulo+1:].strip()
 
                         registros_cambios.append({
@@ -112,7 +144,7 @@ def obtener_datos_cambios():
                         })
 
                 except Exception as error:
-                    print(f"Error al parsear línea de cambio: {error}. Línea: {linea}")
+                    print(f"Error en línea de cambio: {error}. Línea: {linea}")
 
     return registros_cambios
 
@@ -144,10 +176,10 @@ def generar_reporte(formato='txt', modulo_filtro=None, prefijo= "general"):
     registros_finales = []
     
     if filtro_normalizado and filtro_normalizado != 'todos':
-        #Filtramos la lista de registros
+    # Filtramos la lista de registros
         registros_finales = [
             registro for registro in todos_los_registros 
-            if registro["modulo"] == filtro_normalizado
+            if registro["modulo"].strip().lower() == filtro_normalizado
         ]
     else:
         #Si no hay filtro o se pide 'todos', se incluyen todos
