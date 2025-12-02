@@ -62,6 +62,7 @@ def main():
         opcion = input(">> Selecciona una opción (1-6): ").strip()
 
         if opcion == "1":
+            auditor.generar_snapshot(carpeta,tiempo_inicio,True)            
             while True:
                 mostrar_menu_organizer()
                 
