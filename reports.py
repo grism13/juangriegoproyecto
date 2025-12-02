@@ -60,7 +60,7 @@ def obtener_datos_logs():
                     fin_modulo = resto_despues_nivel.find(']', inicio_modulo)
                         
                     if inicio_modulo != -1 and fin_modulo != -1:
-                        modulo_nombre = resto_despues_nivel[inicio_modulo:fin_modulo+1].strip('[]') #El módulo del log
+                        modulo_nombre = resto_despues_nivel[inicio_modulo:fin_modulo+1].strip('[]').lower() #El módulo del log
                             
                         #Extraer la descripción del log
                         descripcion = resto_despues_nivel[fin_modulo+1:].strip()
