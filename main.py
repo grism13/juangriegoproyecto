@@ -2,8 +2,7 @@ import sys
 import utils  # Importamos tus herramientas
 import datetime
 import auditor
-import organizer
-import os
+import analyzer
 
 # Estos imports darán error hasta que tus compañeros creen sus funciones.
 # Por ahora los dejaremos comentados o simularemos que funcionan.
@@ -11,18 +10,15 @@ import os
 # import analyzer
 
 # import reports
-carpeta = "./test_samples"
 
 def mostrar_menu_principal():
     """Despliega las opciones del sistema."""
     utils.mostrar_encabezado("KIT DE AUTOMATIZACIÓN DE ARCHIVOS (v1.0)")
-    print(f"Carpeta=  {carpeta}")
     print("1. [Organizador]  Clasificar y ordenar archivos")
     print("2. [Analizador]   Buscar patrones y contenido")
     print("3. [Auditor]      Detectar cambios en carpetas")
     print("4. [Reportes]     Generar informes (CSV/TXT)")
-    print("5. Cambiar carpeta")
-    print("6. Salir")
+    print("5. Salir")
     print("-" * 60)
 
 def mostrar_menu_auditor():
@@ -33,55 +29,31 @@ def mostrar_menu_auditor():
     print("3. Salir")
     print("-" * 60)
 
-def mostrar_menu_seleccion_carpeta():
-    """Despliga el menu de carpetas"""
-    utils.mostrar_encabezado("SELECCIONADOR DE CARPETAS (v1.0)")
-    print(f"Carpeta actual: {carpeta}")
-    print("1. Cambiar carpeta")
-    print("2. Salir")
-    print("-" * 60)
-
 def main():
-    global carpeta
     tiempo_inicio = datetime.datetime.now().strftime("%Y-%m-%d %H-%M")
     while True:
         mostrar_menu_principal()
         opcion = input(">> Selecciona una opción (1-5): ").strip()
 
         if opcion == "1":
-            print("Iniciando Modulo Organizador...")
-            #Se obtiene ruta y opcion de organizacion
-            carpeta = organizer.pedir_ruta()
-            opcion = organizer.pedir_opcion()
+            # Aquí llamaremos a: organizer.iniciar()
+            print("\n🚧 Módulo del Organizador (Eliezer) en construcción...")
+            input("Presiona Enter para volver...")
 
-            if opcion == "1":
-                organizer.organizar_archivos_por_espacio(carpeta)
-
-            elif opcion == "2":
-                organizer.organizar_archivos_por_extension(carpeta)
-            
-            elif opcion == "3":
-                organizer.organizar_archivos_por_fecha(carpeta)
-
-            else:
-                print("Hubo un error en el sistema...")
-
-            input("Presione ENTER para volver al inicio...")
-            
         elif opcion == "2":
             # Aquí llamaremos a: analyzer.iniciar()
-            print("\n🚧 Módulo del Analizador (Roand) en construcción...")
-            input("Presiona Enter para volver...")
+            analyzer.menu_analizador() 
+            
 
         elif opcion == "3":
             while True:
                 mostrar_menu_auditor()
                 opcion = input(">> Selecciona una opción (1-5): ").strip()
                 if opcion == "1":
-                    auditor.generar_snapshot(carpeta,tiempo_inicio)
+                    auditor.generar_snapshot("./test_samples",tiempo_inicio)
                     input("Presiona Enter para volver...")
                 elif opcion == "2":
-                    auditor.generar_reporte(carpeta,tiempo_inicio)
+                    auditor.generar_reporte("./test_samples",tiempo_inicio)
                     input("Presiona Enter para volver...")
                 elif opcion == "3":
                     break
@@ -96,31 +68,6 @@ def main():
             input("Presiona Enter para volver...")
 
         elif opcion == "5":
-            #Menu para cambiar la carpeta
-            while True:
-                mostrar_menu_seleccion_carpeta()
-                opcion = input(">> Selecciona una opción (1-2): ").strip()
-                if opcion == "1":
-                    while True:
-                        utils.limpiar_pantalla()
-                        ruta = input("Introduzca la ruta de la carpeta:")
-                        if os.path.exists(ruta) and ruta != "./":
-                            carpeta = ruta 
-                            break
-                        else:
-                            input("Opción no Valida , presione enter para continuar...")
-                            continue
-                elif opcion == "2":
-                    input("Saliendo, press enter para continuar...")
-                    break
-                else:
-                    print("\n❌ Error: Opción no válida.")
-                    input("Presiona Enter para intentar de nuevo...")
-                    
-                    
-
-
-        elif opcion == "6":
             print("\n¡Hasta luego! Cerrando sistema...")
             break
         
