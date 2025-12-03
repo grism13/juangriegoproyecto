@@ -1,12 +1,22 @@
 import os
 import platform
 import datetime
+import time
 
 colores ={ 
 "rojo" : '\033[91m',
 "verde" : '\033[92m',
 "normal": '\033[0m',
 }
+
+def medir_tiempo(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} tardo {end_time - start_time}s en terminar \n")
+    return wrapper
+
 
 def limpiar_pantalla():
     """Limpia la consola según el sistema operativo."""
