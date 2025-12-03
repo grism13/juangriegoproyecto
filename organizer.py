@@ -96,7 +96,7 @@ def organizar_archivos_por_espacio(ruta_de_carpeta,tiempo):
 
                 if tamano_mb < 1:
                     nombre_carpeta = "PEQUEÑOS"
-                elif tamano_mb < 10:
+                elif tamano_mb < 500:
                     nombre_carpeta = "MEDIANOS"
                 else:
                     nombre_carpeta = "GRANDES"
