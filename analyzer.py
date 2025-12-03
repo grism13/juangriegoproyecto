@@ -49,9 +49,9 @@ def menu_analizador(carpeta,tiempo):
             for i, item in enumerate(resultados):
                 i += 1
                 if i < 10:
-                    utils.escribir_log("INFO","Resultado encontrado",f"Línea {item['linea']}: {item['valor']}",tiempo,"Analyzer","analyzer")
+                    utils.escribir_log("INFO",f"Resultado encontrado en{archivo_a_analizar}",f"Línea {item['linea']}: {item['valor']}",tiempo,"Analyzer","analyzer")
                 else:
-                    utils.escribir_log("INFO","Resultado encontrado",f"... y {len(resultados) - 10} más.",tiempo,"Analyzer","alyzer")
+                    utils.escribir_log("INFO",f"Resultado encontrado en{archivo_a_analizar}",f"... y {len(resultados) - 10} más.",tiempo,"Analyzer","analyzer")
                     break
             
             # Generar Estadísticas
@@ -64,10 +64,10 @@ def menu_analizador(carpeta,tiempo):
             mas_comunes = sorted(conteo.items(), key=lambda x: x[1], reverse=True)[:5]
             
             for valor, cantidad in mas_comunes:
-                utils.escribir_log("INFO","Frecuencia",f"'{valor}' aparece {cantidad} veces.",tiempo,"Analyzer","analizer")
+                utils.escribir_log("INFO","Frecuencia",f"'{valor}' aparece {str(cantidad) + " vez" if cantidad == 1 else str(cantidad) + " veces" } en {archivo_a_analizar}",tiempo,"Analyzer","analyzer")
                 
         else:
-            utils.escribir_log("WARM","No se encontraron coincidencias."," ",tiempo,"Analyzer","analyzer")
+            utils.escribir_log("WARM",f"No se encontraron coincidencias en {archivo_a_analizar}"," ",tiempo,"Analyzer","analyzer")
         
         # PREGUNTA CLAVE
         continuar = input("\n¿Quieres buscar OTRO patrón en este MISMO archivo? (s/n): ").strip().lower()
@@ -121,7 +121,7 @@ def leer_archivo_eficiente(ruta_archivo,tiempo):
             for linea in archivo:
                 yield linea  # <--- Esto entrega la línea y pausa (Generador)
     except FileNotFoundError:
-        utils.escribir_log("ERROR","Error archivo no encontrado",f"No se encontró el archivo: {ruta_archivo}",tiempo,"Analyzer","analyzer")
+        utils.escribir_log("ERROR",f"Error archivo no encontrado en: {ruta_archivo}",f"No se encontró el archivo: {ruta_archivo}",tiempo,"Analyzer","analyzer")
     except Exception as e:
         utils.escribir_log("ERROR",f" Error leyendo el archivo en: {ruta_archivo}",f"Error : {e}",tiempo,"Analyzer","analyzer")
 
