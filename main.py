@@ -103,8 +103,7 @@ def main():
         elif opcion == "4":
             # --- REPORTES ---
             # Llamamos a la función principal de Juan
-            reports.iniciar_modulo_reportes() 
-            input("Presiona Enter para volver...")
+            reports.iniciar_modulo_reportes(tiempo_inicio) 
 
         elif opcion == "5":
             #Menu para cambiar la carpeta

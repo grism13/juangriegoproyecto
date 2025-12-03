@@ -38,5 +38,5 @@ def escribir_log(nivel, mensaje, detalles,tiempo,host,nombre_log,carpeta="logs")
     
     # 3. Escribir y mostrar en consola
     print(linea_log)
-    with open(f"./{carpeta}/{nombre_log}_{tiempo}.log", "a") as log:
+    with open(f"./{carpeta}/{nombre_log}_{tiempo}.log","a",encoding='utf-8') as log:
         log.write(linea_log)

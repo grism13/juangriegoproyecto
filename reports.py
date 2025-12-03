@@ -12,7 +12,7 @@ cambios= "cambios"
 carpeta_reportes = "reportes"
 modulos= ["organizer", "audit", "analyzer"]
 
-def leer_archivos(directorio, extension=".log"):
+def leer_archivos(directorio,tiempo,extension=".log"):
     """Función general para leer todos los archivos con una extensión .log en un directorio dado y esta devuelve su contenido."""
     data = []
     if not os.path.exists(directorio): #Si no existe el directorio, imprime una advertencia
@@ -20,7 +20,7 @@ def leer_archivos(directorio, extension=".log"):
         return data
 
     for nombre_archivo in os.listdir(directorio):
-        if nombre_archivo.endswith(extension): #Busca si termina en .log
+        if nombre_archivo.endswith(tiempo+extension): #Busca si termina en .log
             filepath = os.path.join(directorio, nombre_archivo)
             try:
                 with open(filepath, 'r', encoding='utf-8') as archivo: #Almacenamos el nombre del archivo y todas sus líneas
@@ -33,9 +33,9 @@ def leer_archivos(directorio, extension=".log"):
                 print(f"Error al leer el archivo {filepath}: {error}")
     return data
 
-def obtener_datos_logs():
+def obtener_datos_logs(tiempo):
     """Lee la información de la carpeta logs."""
-    archivos_logs = leer_archivos(logs, extension=".log")
+    archivos_logs = leer_archivos(logs,tiempo, extension=".log")
     registros_logs = []
 
     for archivo in archivos_logs:
@@ -93,9 +93,9 @@ def obtener_datos_logs():
 
     return registros_logs
 
-def obtener_datos_cambios():
+def obtener_datos_cambios(tiempo):
     """Lee la información de la carpeta cambios."""
-    archivos_cambios = leer_archivos(cambios, extension=".log")
+    archivos_cambios = leer_archivos(cambios, tiempo,extension=".log")
     registros_cambios = []
     
     for archivo in archivos_cambios:
@@ -154,15 +154,15 @@ if not os.path.exists(carpeta_reportes):
 
 #Funciones para generar los reportes y archivos .csv ó .txt
 
-def generar_reporte(formato='txt', modulo_filtro=None, prefijo= "general"):
+def generar_reporte(tiempo,formato='txt', modulo_filtro=None, prefijo= "general"):
     """Función principal que compila todos los datos ó filtra por módulo y genera el reporte."""
     #Normalizar el filtro a minúsculas
     filtro_normalizado = modulo_filtro.lower() if modulo_filtro else None
 
     #Obtener todos los datos
     print("Obteniendo todos los datos disponibles...")
-    registros_cambios = obtener_datos_cambios()
-    registros_logs = obtener_datos_logs()
+    registros_cambios = obtener_datos_cambios(tiempo)
+    registros_logs = obtener_datos_logs(tiempo)
     
     todos_los_registros = registros_cambios + registros_logs
 
@@ -236,7 +236,7 @@ def escribir_reporte_csv(ruta_completa_archivo, registros):
 
 #Flujo del módulo
 
-def iniciar_modulo_reportes(): 
+def iniciar_modulo_reportes(tiempo): 
     """Función principal que ejecuta el flujo del módulo reports.py"""
     utils.limpiar_pantalla()
     while True:
@@ -302,7 +302,7 @@ def iniciar_modulo_reportes():
             continue
 
         try:
-            generar_reporte(formato=formato, modulo_filtro=modulo_a_filtrar, prefijo=prefijo_archivo) #Se genera el reporte en base a los parámetros
+            generar_reporte(tiempo,formato=formato, modulo_filtro=modulo_a_filtrar, prefijo=prefijo_archivo) #Se genera el reporte en base a los parámetros
             
         except Exception as error:
             print(f"\n[ERROR] No se pudo generar el reporte: {error}")
