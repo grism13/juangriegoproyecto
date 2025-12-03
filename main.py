@@ -81,7 +81,7 @@ def main():
                     input("Opción no válida . Prees enter para continuar...")
             
         elif opcion == "2":
-            analyzer.menu_analizador()
+            analyzer.menu_analizador(carpeta,tiempo_inicio)
 
         elif opcion == "3":
             # --- AUDITOR ---
@@ -103,8 +103,7 @@ def main():
         elif opcion == "4":
             # --- REPORTES ---
             # Llamamos a la función principal de Juan
-            reports.iniciar_modulo_reportes() 
-            input("Presiona Enter para volver...")
+            reports.iniciar_modulo_reportes(tiempo_inicio) 
 
         elif opcion == "5":
             #Menu para cambiar la carpeta
@@ -115,7 +114,7 @@ def main():
                     while True:
                         utils.limpiar_pantalla()
                         ruta = input("Introduzca la ruta de la carpeta:")
-                        if os.path.exists(ruta) and ruta not in ["./","./logs","./env"]:
+                        if os.path.exists(ruta) and ruta not in ["./","./logs","./env","./cambios","./reportes"]:
                             carpeta = ruta 
                             break
                         else:

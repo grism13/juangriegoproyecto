@@ -4,6 +4,7 @@ import shutil
 import time
 import utils
 
+@utils.medir_tiempo
 def mover_archivo(ruta_origen, carpeta_destino_nombre, carpeta_raiz,tiempo):
 
     # Calculamos la ruta completa de la carpeta destino

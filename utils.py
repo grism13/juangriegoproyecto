@@ -1,12 +1,22 @@
 import os
 import platform
 import datetime
+import time
 
 colores ={ 
 "rojo" : '\033[91m',
 "verde" : '\033[92m',
 "normal": '\033[0m',
 }
+
+def medir_tiempo(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} tardo {end_time - start_time}s en terminar \n")
+    return wrapper
+
 
 def limpiar_pantalla():
     """Limpia la consola según el sistema operativo."""
@@ -38,5 +48,5 @@ def escribir_log(nivel, mensaje, detalles,tiempo,host,nombre_log,carpeta="logs")
     
     # 3. Escribir y mostrar en consola
     print(linea_log)
-    with open(f"./{carpeta}/{nombre_log}_{tiempo}.log", "a") as log:
+    with open(f"./{carpeta}/{nombre_log}_{tiempo}.log","a",encoding='utf-8') as log:
         log.write(linea_log)

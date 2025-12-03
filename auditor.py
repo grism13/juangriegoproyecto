@@ -27,7 +27,7 @@ def generar_snapshot(carpeta,tiempo,saltar_comprobacion=False):
         print("Desea sobreescribir el snapshot? (s/n)")
         respuesta = input().lower()
     if respuesta == "s":
-        with open("./logs/snapshot.json", "w") as snapshot:
+        with open("./logs/snapshot.json", "w", encoding='utf-8') as snapshot:
             json.dump(obtener_estado_actual(carpeta), snapshot, indent=4)
         escribir_log("INFO", "Snapshot generado exitosamente.", f"Carpeta={carpeta}",tiempo,"Auditor","audit")
     else:
@@ -42,7 +42,7 @@ def generar_reporte(carpeta,tiempo):
     if not os.path.exists("./logs/snapshot.json"):
         escribir_log("ERROR", "No se encontro snapshot.json, Volviendo al menu principal", " ",tiempo,"Auditor","audit")
         return
-    with open("./logs/snapshot.json", "r") as snapshot:
+    with open("./logs/snapshot.json", "r", encoding='utf-8') as snapshot:
         estado_anterior = json.load(snapshot)
     estado_actual = obtener_estado_actual(carpeta)
     
