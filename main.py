@@ -1,5 +1,5 @@
 import sys
-import utils  # Importamos tus herramientas
+import utils  
 import datetime
 import auditor
 import organizer
@@ -8,7 +8,6 @@ import reports
 import os
 
 
-# Por ahora los dejaremos comentados o simularemos que funcionan.
 
 carpeta = "./test_samples" #carpeta de ejemplo
 
@@ -106,7 +105,7 @@ def main():
             reports.iniciar_modulo_reportes(tiempo_inicio) 
 
         elif opcion == "5":
-            #Menu para cambiar la carpeta
+            # Menu para cambiar la carpeta
             while True:
                 mostrar_menu_seleccion_carpeta()
                 opcion = input(">> Selecciona una opción (1-2): ").strip()
