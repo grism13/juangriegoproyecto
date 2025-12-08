@@ -119,7 +119,7 @@ def leer_archivo_eficiente(ruta_archivo,tiempo):
         # Abrimos el archivo
         with open(ruta_archivo, 'r', encoding='utf-8', errors='ignore') as archivo:
             for linea in archivo:
-                yield linea  # <--- Esto entrega la línea y pausa (Generador)
+                yield linea  # Esto entrega la línea y pausa (generador)
     except FileNotFoundError:
         utils.escribir_log("ERROR",f"Error archivo no encontrado en: {ruta_archivo}",f"No se encontró el archivo: {ruta_archivo}",tiempo,"Analyzer","analyzer")
     except Exception as e:

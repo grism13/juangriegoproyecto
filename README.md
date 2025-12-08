@@ -3,9 +3,9 @@ Ing. Richard Rivera, la estancia por unidad curricular fue gratificante y enriqu
 **INTEGRANTES**
     -Juan Villarroel
     -Gabriel Carneiro
-    -Roand Rodriguez
-    -Eliezer Rodriguez
-    -Grisangely Martinez
+    -Roand Rodríguez
+    -Eliezer Rodríguez
+    -Grisangely Martínez
 
 **Kit Multifuncional de Automatización de Archivos**
 

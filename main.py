@@ -105,7 +105,7 @@ def main():
             reports.iniciar_modulo_reportes(tiempo_inicio) 
 
         elif opcion == "5":
-            # Menu para cambiar la carpeta
+            # Menú para cambiar la carpeta
             while True:
                 mostrar_menu_seleccion_carpeta()
                 opcion = input(">> Selecciona una opción (1-2): ").strip()
@@ -123,7 +123,7 @@ def main():
                     input("Saliendo, press enter para continuar...")
                     break
                 else:
-                    print("\n❌ Error: Opción no válida.")
+                    print("\n Error: Opción no válida.")
                     input("Presiona Enter para intentar de nuevo...")
                     
         elif opcion == "6":
@@ -131,7 +131,7 @@ def main():
             break
         
         else:
-            print("\n❌ Error: Opción no válida.")
+            print("\n Error: Opción no válida.")
             input("Presiona Enter para intentar de nuevo...")
 
 if __name__ == "__main__":
